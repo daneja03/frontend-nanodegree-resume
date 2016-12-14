@@ -105,11 +105,11 @@ var formattedTwitter = HTMLtwitter.replace("%data%", bio.contacts.twitter);
 var formattedGitHub = HTMLgithub.replace("%data%", bio.contacts.github);
 var formattedLocation = HTMLlocation.replace("%data%", bio.contacts.location);
 
-$("#header").append(formattedMobile);
-$("#header").append(formattedEmail);
-$("#header").append(formattedTwitter);
-$("#header").append(formattedGitHub);
-$("#header").append(formattedLocation);
+$("#topContacts").append(formattedMobile);
+$("#topContacts").append(formattedEmail);
+$("#topContacts").append(formattedTwitter);
+$("#topContacts").append(formattedGitHub);
+$("#topContacts").append(formattedLocation);
 
 if(bio.skills != null && bio.skills.length > 0)
 {
@@ -122,21 +122,67 @@ if(bio.skills != null && bio.skills.length > 0)
 	}
 }
 
-for(job in work.jobs)
+
+// $(document).click(function(loc){
+// 	var x = loc.pageX;
+// 	var y = loc.pageY;
+// 	logClicks(x,y);
+// });
+
+function inName(name)
 {
-	$("#workExperience").append(HTMLworkStart);
-	var formattedJobEmployer = HTMLworkEmployer.replace("%data%", work.jobs[job].employer);
-	var formattedJobTitle = HTMLworkTitle.replace("%data%", work.jobs[job].title);
-	$(".work-entry:last").append(formattedJobEmployer + formattedJobTitle);
-	var formattedLocation = HTMLworkLocation.replace("%data%", work.jobs[job].location);
-	$("#workExperience").append(formattedLocation);
-	var formattedDates = HTMLworkDates.replace("%data%", work.jobs[job].dates);
-	$("#workExperience").append(formattedDates);
-	var formattedDescription = HTMLworkDescription.replace("%data%", work.jobs[job].description);
-	$("#workExperience").append(formattedDescription);
+	var splitArray = name.trim().split(" ");
+	var firstName = splitArray[0];
+	var lastName = splitArray[1];
+	lastName = lastName.toUpperCase();
+	firstName = firstName.toLowerCase();
+	var firstNameRest = firstName.slice(1);
+	var firstNameFirstChar = firstName[0].toUpperCase();
+	return firstNameFirstChar + firstNameRest + " " + lastName;
 }
 
+var displayWork = function()
+	{
+	for(job in work.jobs)
+	{
+		$("#workExperience").append(HTMLworkStart);
+		var formattedJobEmployer = HTMLworkEmployer.replace("%data%", work.jobs[job].employer);
+		var formattedJobTitle = HTMLworkTitle.replace("%data%", work.jobs[job].title);
+		$(".work-entry:last").append(formattedJobEmployer + formattedJobTitle);
+		var formattedLocation = HTMLworkLocation.replace("%data%", work.jobs[job].location);
+		$(".work-entry:last").append(formattedLocation);
+		var formattedDates = HTMLworkDates.replace("%data%", work.jobs[job].dates);
+		$(".work-entry:last").append(formattedDates);
+		var formattedDescription = HTMLworkDescription.replace("%data%", work.jobs[job].description);
+		$(".work-entry:last").append(formattedDescription);
+	}
+};
+
+displayWork();
 
 
+projects.display = function(){
+		
+		for(project in projects.projects)
+		{
+			$("#projects").append(HTMLprojectStart);
+			var formattedProjectTitle = HTMLprojectTitle.replace("%data%", projects.projects[project].title);
+			var formattedProjectDates = HTMLprojectDates.replace("%data%", projects.projects[project].dates);
+			var formattedProjectDescription = HTMLprojectDescription.replace("%data%", projects.projects[project].description);
+			$(".project-entry:last").append(formattedProjectTitle);
+			$(".project-entry:last").append(formattedProjectDates);
+			$(".project-entry:last").append(formattedProjectDescription);
+			if(projects.projects[project].images.length > 0)
+			{
+				for(image in projects.projects[project].images)
+				{
+					var formattedProjectImage = HTMLprojectImage.replace("%data%", projects.projects[project].images[image]);
+					$(".project-entry:last").append(formattedProjectImage);
+				}
+			}
+		}
+	}
 
+projects.display();
 
+$("#mapDiv").append(googleMap);
